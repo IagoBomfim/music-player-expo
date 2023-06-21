@@ -1,0 +1,7 @@
+{
+    "tailwindCSS.rootFontSize": 18,
+    "githubPullRequests.remotes": [
+        "https://github.com/IagoBomfim/music-player-expo.git",
+        "upstream"
+    ]
+}
