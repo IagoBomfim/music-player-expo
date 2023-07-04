@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState, ReactNode } from 'react';
 import { Alert } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
+import { AVPlaybackStatus } from 'expo-av';
 
 interface Audio {
     id: string;
@@ -13,6 +14,17 @@ interface PlayList {}
 
 interface AudioProvaiderTypes {
     audioFiles: Audio[];
+    soundObj: AVPlaybackStatus | undefined;
+    currentAudio: Audio;
+    UpdateStates: ({}: UpdateStateProps) => void;
+    isPlayingAudio: boolean;
+}
+
+interface UpdateStateProps {
+    UpdateSoundObj: AVPlaybackStatus | undefined;
+    UpdateCurrentAudio: Audio;
+    UpdateIsPlayingAudio: boolean;
+
 }
 
 export const AudioContext = createContext<AudioProvaiderTypes>({} as AudioProvaiderTypes)
@@ -21,6 +33,10 @@ export function AudioProvaider({ children }: {children: ReactNode }) {
 
     const [audioFiles, setAudioFiles] = useState<Audio[]>([]);
     const [PermissionError, setPermissionError] = useState(false);
+
+    const [soundObj, setSoundObj] = useState<AVPlaybackStatus | undefined>();
+    const [currentAudio, setCurrentAudio] = useState<Audio>({} as Audio);
+    const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
     useEffect(() => {
         getPermission();
@@ -75,8 +91,14 @@ export function AudioProvaider({ children }: {children: ReactNode }) {
         }
     };
 
+    const UpdateStates = ({ UpdateCurrentAudio, UpdateSoundObj, UpdateIsPlayingAudio }: UpdateStateProps) => {
+        setCurrentAudio(UpdateCurrentAudio);
+        setSoundObj(UpdateSoundObj);
+        setIsPlayingAudio(UpdateIsPlayingAudio)
+    }
+
     return (
-        <AudioContext.Provider value={{audioFiles: audioFiles}}>
+        <AudioContext.Provider value={{audioFiles: audioFiles, currentAudio, soundObj, UpdateStates, isPlayingAudio}}>
             {children}
         </AudioContext.Provider>
     );
