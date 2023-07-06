@@ -1,14 +1,14 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions, View, Text } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { AVPlaybackStatus } from 'expo-av';
+import { AVPlaybackStatus, Audio } from 'expo-av';
  
 import { AudioContext } from '../../src/context/AudioProvaider';
 import AudioListItem from '../components/AudioListItem';
 import OptionsModal from '../components/optionsModal';
 import { play, pause, resume, playNext } from '../../src/functions/AudioController';
 
-interface Audio {
+interface AudioProps {
   id: string;
   uri: string;
   filename: string;
@@ -16,51 +16,24 @@ interface Audio {
 }
 
 export default function TabOneScreen() {
-  const { audioFiles, UpdateStates, currentAudio, soundObj, isPlayingAudio } = useContext(AudioContext);
+  const { audioFiles } = useContext(AudioContext);
 
   const [visible, setVisible] = useState(false);
 
-  const handleAudioPress = async (item: Audio) => {
-    //playing audio for the fist time
-    if (soundObj === undefined && isPlayingAudio === false) {
-      const status = await play(item);
-      UpdateStates({ 
-        UpdateCurrentAudio: item,
-        UpdateSoundObj: status,
-        UpdateIsPlayingAudio: true
-      })   
-  }
+  let isPlaying = false;
 
-  //pause audio
-  if (soundObj?.isLoaded && soundObj.isPlaying) {
-    const status = await pause();
-    UpdateStates({ UpdateSoundObj: status, UpdateCurrentAudio: item, UpdateIsPlayingAudio: false }); 
-    console.log('passou aqui: pause function');
-     
-  }
+  const handleAudioPress = async (item: AudioProps) => {
+    try {
+      if (isPlaying === false) {
+        play(item)
+        isPlaying = true
+      }
 
-  //resume audio
-  if (soundObj?.isLoaded && !soundObj.isPlaying && currentAudio.id === item.id) {
-      const status = await resume();
-      UpdateStates({ UpdateSoundObj: status, UpdateCurrentAudio: item, UpdateIsPlayingAudio: true }); 
-      console.log('passou aqui: resume function'); 
+    } catch (error) {
+      
     }
-
-    //select another audio
-
-    if (soundObj?.isLoaded && currentAudio.id !== item.id) {
-      const status = await playNext(item);
-      UpdateStates(
-        {
-          UpdateSoundObj: status,
-          UpdateCurrentAudio: item,
-          UpdateIsPlayingAudio: true
-        }
-      )
-    }
-
+    
 }
-
 
   return (
     <View className='flex-1 pt-[48px] pl-2 bg-slate-400'>
