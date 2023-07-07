@@ -17,9 +17,10 @@ const playBackObj = new Audio.Sound();
 //play audio
 export const play = async (item: Audio) => {
   try {
-    await playBackObj.loadAsync({ uri: item.uri });
+    const Status = await playBackObj.loadAsync({ uri: item.uri });
     await playBackObj.playAsync();
 
+    return Status;
   } catch (error) {
     console.log('play function error: ' + error);
   }
@@ -27,8 +28,11 @@ export const play = async (item: Audio) => {
 
 //pause audio
 export const pause = async () => {
+  console.log('funcao pause');
   try {
+    const status = await playBackObj.pauseAsync()
 
+    return status
   } catch (error) {   
     console.log('pause function error: ' + error);
   }
@@ -36,8 +40,13 @@ export const pause = async () => {
 
 //resume audio
 export const resume = async () => {
-  try {
 
+  console.log('funcao resume');
+  
+  try {
+    const status =  await playBackObj.playAsync();
+
+    return status;
   } catch (error) {
     console.log('resume function error: ' +error);
   }
@@ -46,6 +55,12 @@ export const resume = async () => {
 //select another audio
 export const playNext = async (item: Audio) => {
     try {
+      await playBackObj.stopAsync();
+      await playBackObj.unloadAsync();
+      
+      const status = await play(item);
+
+      return status;
     } catch (error) {
         console.log('Play next function error: ' +error);
     }

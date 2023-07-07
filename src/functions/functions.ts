@@ -21,4 +21,6 @@ const comverttime = (minutes: number) => {
     }
 }
 
-export { comverttime }
+const GetMetaDados = () => {}
+
+export { comverttime, GetMetaDados }

@@ -16,17 +16,52 @@ interface AudioProps {
 }
 
 export default function TabOneScreen() {
-  const { audioFiles } = useContext(AudioContext);
+  const { audioFiles, IsPlaying, UpdatePropsPlaying } = useContext(AudioContext);
 
   const [visible, setVisible] = useState(false);
 
-  let isPlaying = false;
+  let  SoundObj: AVPlaybackStatus | undefined = undefined;
+  let CurrentAudio: AudioProps;
+  let StatusPlaying: 'off' | 'playing' | 'pause' = 'off';
 
   const handleAudioPress = async (item: AudioProps) => {
+
+    const PlayBackObj = new Audio.Sound();
     try {
-      if (isPlaying === false) {
-        play(item)
-        isPlaying = true
+      if (IsPlaying === false && StatusPlaying === 'off') {
+        const Status = await play(item)
+        SoundObj = Status;
+        CurrentAudio = item;
+        StatusPlaying = 'playing';
+  
+        return UpdatePropsPlaying(true);
+      }
+
+
+      if (SoundObj?.isLoaded && IsPlaying && CurrentAudio.id === item.id && StatusPlaying === 'playing') {
+        const status = await pause();
+        SoundObj = status;
+        StatusPlaying = 'pause';
+
+        return UpdatePropsPlaying(false);
+      }
+
+      if (SoundObj?.isLoaded && !IsPlaying && CurrentAudio.id === item.id && StatusPlaying === 'pause') {
+        const status = await resume()
+        SoundObj = status;
+        StatusPlaying = 'playing';
+
+        return UpdatePropsPlaying(true);
+      }
+
+      if (SoundObj?.isLoaded && CurrentAudio.id !== item.id){
+        const status = await playNext(item);
+
+        SoundObj = status;
+        StatusPlaying = 'playing';
+        CurrentAudio = item;
+
+        return UpdatePropsPlaying(true);
       }
 
     } catch (error) {
