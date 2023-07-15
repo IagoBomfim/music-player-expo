@@ -1,3 +1,4 @@
+
 const comverttime = (minutes: number) => {
     if (minutes) {
         const hrs = minutes/60;
@@ -21,6 +22,6 @@ const comverttime = (minutes: number) => {
     }
 }
 
-const GetMetaDados = () => {}
+const GetMetaDados = async (uri: string, id: string) => {}
 
 export { comverttime, GetMetaDados }

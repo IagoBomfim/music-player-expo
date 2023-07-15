@@ -15,10 +15,9 @@ interface PlayList {}
 interface AudioProvaiderTypes {
     audioFiles: Audio[];
     IsPlaying: boolean;
-    UpdatePropsPlaying: (UpdateIsPlaying: boolean) => any;
+    UpdatePropsPlaying: (UpdateIsPlaying: boolean, UpateCurrentAudioData: Audio) => any;
+    CurrentAudio: Audio;
 }
-
-
 
 export const AudioContext = createContext<AudioProvaiderTypes>({} as AudioProvaiderTypes)
 
@@ -27,7 +26,9 @@ export function AudioProvaider({ children }: {children: ReactNode }) {
     const [audioFiles, setAudioFiles] = useState<Audio[]>([]);
     const [PermissionError, setPermissionError] = useState(false);
 
-    let IsPlaying = false;
+    let IsPlaying: boolean = false;
+    let CurrentAudio: Audio = {} as Audio;
+
 
 
     useEffect(() => {
@@ -83,13 +84,17 @@ export function AudioProvaider({ children }: {children: ReactNode }) {
         }
     };
 
-    const UpdatePropsPlaying = (UpdateIsPlaying: boolean) => {
-        return IsPlaying = UpdateIsPlaying;
+    const UpdatePropsPlaying = (UpdateIsPlaying: boolean, UpateCurrentAudioData: Audio) => {
+     
+        return (
+            IsPlaying = UpdateIsPlaying,
+            CurrentAudio = UpateCurrentAudioData
+        )
         
     }
 
     return (
-        <AudioContext.Provider value={{audioFiles: audioFiles, IsPlaying, UpdatePropsPlaying}}>
+        <AudioContext.Provider value={{audioFiles: audioFiles, IsPlaying, UpdatePropsPlaying, CurrentAudio}}>
             {children}
         </AudioContext.Provider>
     );

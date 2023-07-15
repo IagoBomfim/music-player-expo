@@ -1,4 +1,4 @@
-import { Audio } from "expo-av";
+import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from "expo-av";
 
 interface Audio {
   id: string;
@@ -17,6 +17,16 @@ const playBackObj = new Audio.Sound();
 //play audio
 export const play = async (item: Audio) => {
   try {
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      staysActiveInBackground: true,
+      interruptionModeIOS: InterruptionModeIOS.DuckOthers,
+      interruptionModeAndroid: InterruptionModeAndroid.DuckOthers,
+      shouldDuckAndroid: true,
+      playThroughEarpieceAndroid: false,
+      playsInSilentModeIOS: true
+    })
+
     const Status = await playBackObj.loadAsync({ uri: item.uri });
     await playBackObj.playAsync();
 

@@ -1,7 +1,7 @@
 import { View, Text, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { Entypo } from "@expo/vector-icons";
-import {  } from "react-native-gesture-handler";
 import { comverttime } from "../../src/functions/functions";
+import { Link } from "expo-router";
 
 interface Audio {
   id: string;
@@ -22,7 +22,11 @@ export default function AudioListItem({ data, onOptionsPress, onAudioPress }: Au
   return (
     <>
       <View className="w-full flex-row justify-between p-2 self-center ">
-        <TouchableOpacity onPress={() => onAudioPress()}>
+        <Link href='/PlayerControl' asChild >
+        <TouchableOpacity 
+        onPress={() => {
+          onAudioPress()
+        }}>
           <View className="flex-row items-center flex-1">
             <View className="h-11 w-11 basis-11 justify-center items-center rounded-full bg-zinc-300">
               <Text className="text-xl font-bold text-center">
@@ -39,6 +43,7 @@ export default function AudioListItem({ data, onOptionsPress, onAudioPress }: Au
             </View>
           </View>
         </TouchableOpacity>
+        </Link>
 
         <View className="basis-11">
           <Entypo

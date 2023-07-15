@@ -7,6 +7,8 @@ import { AudioContext } from '../../src/context/AudioProvaider';
 import AudioListItem from '../components/AudioListItem';
 import OptionsModal from '../components/optionsModal';
 import { play, pause, resume, playNext } from '../../src/functions/AudioController';
+import { GetMetaDados } from '../../src/functions/functions';
+import FloatingButton from '../components/FloatingButton';
 
 interface AudioProps {
   id: string;
@@ -16,52 +18,56 @@ interface AudioProps {
 }
 
 export default function TabOneScreen() {
-  const { audioFiles, IsPlaying, UpdatePropsPlaying } = useContext(AudioContext);
+  const { audioFiles, IsPlaying, UpdatePropsPlaying, CurrentAudio } = useContext(AudioContext);
 
   const [visible, setVisible] = useState(false);
 
   let  SoundObj: AVPlaybackStatus | undefined = undefined;
-  let CurrentAudio: AudioProps;
   let StatusPlaying: 'off' | 'playing' | 'pause' = 'off';
 
-  const handleAudioPress = async (item: AudioProps) => {
+  IsPlaying ? StatusPlaying = 'playing' : StatusPlaying = 'off';
 
+  const handleAudioPress = async (item: AudioProps) => {
+    console.log(item.filename);
+    
     const PlayBackObj = new Audio.Sound();
     try {
+      //play
       if (IsPlaying === false && StatusPlaying === 'off') {
         const Status = await play(item)
         SoundObj = Status;
-        CurrentAudio = item;
         StatusPlaying = 'playing';
+        GetMetaDados(item.uri, item.id);
   
-        return UpdatePropsPlaying(true);
+        return UpdatePropsPlaying(true, item);
       }
 
+      //next play
+      if (SoundObj?.isLoaded && CurrentAudio.id !== item.id && StatusPlaying === 'playing'){
+        const status = await playNext(item);
 
+        SoundObj = status;
+        StatusPlaying = 'playing';
+
+        return UpdatePropsPlaying(true, item);
+      }
+      
+      //pause
       if (SoundObj?.isLoaded && IsPlaying && CurrentAudio.id === item.id && StatusPlaying === 'playing') {
         const status = await pause();
         SoundObj = status;
         StatusPlaying = 'pause';
 
-        return UpdatePropsPlaying(false);
+        return UpdatePropsPlaying(false, item);
       }
 
+      //resume
       if (SoundObj?.isLoaded && !IsPlaying && CurrentAudio.id === item.id && StatusPlaying === 'pause') {
         const status = await resume()
         SoundObj = status;
         StatusPlaying = 'playing';
 
-        return UpdatePropsPlaying(true);
-      }
-
-      if (SoundObj?.isLoaded && CurrentAudio.id !== item.id){
-        const status = await playNext(item);
-
-        SoundObj = status;
-        StatusPlaying = 'playing';
-        CurrentAudio = item;
-
-        return UpdatePropsPlaying(true);
+        return UpdatePropsPlaying(true, item);
       }
 
     } catch (error) {
@@ -75,10 +81,14 @@ export default function TabOneScreen() {
       <FlashList
         data={audioFiles}
         renderItem={({ item }) => {
-          return <AudioListItem data={item} onOptionsPress={() => {setVisible(true)}} onAudioPress={() => handleAudioPress(item)} />
+          return <AudioListItem 
+          data={item} 
+          onOptionsPress={() => {setVisible(true)}} onAudioPress={() => handleAudioPress(item)}
+           />
         }}
         estimatedItemSize={800}
       />
+      {/* <FloatingButton /> */}
     </View>
   );
 }
