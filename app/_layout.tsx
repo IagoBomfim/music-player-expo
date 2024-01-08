@@ -10,6 +10,8 @@ import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { AudioProvaider } from "../src/context/AudioProvaider";
 import { StatusBar } from 'expo-status-bar';
+import Colors from "../src/constants/defaultTheme";
+import { Ionicons } from "@expo/vector-icons";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -51,7 +53,13 @@ function RootLayoutNav() {
     <>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ 
+            headerTitle: '  ',
+            headerStyle: {
+              backgroundColor: Colors.background
+            },
+            headerRight: () => <Ionicons name="ios-settings-outline" size={24} color={Colors.white} />
+            }} />
           <Stack.Screen name="(stack)" options={{ headerShown: false }} />
         </Stack>
       </ThemeProvider>

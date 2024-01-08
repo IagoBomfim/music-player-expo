@@ -2,6 +2,7 @@ import { View, Text, TouchableWithoutFeedback, TouchableOpacity } from "react-na
 import { Entypo } from "@expo/vector-icons";
 import { comverttime } from "../../src/functions/functions";
 import { Link } from "expo-router";
+import Colors from "../../src/constants/defaultTheme";
 
 interface Audio {
   id: string;
@@ -28,16 +29,16 @@ export default function AudioListItem({ data, onOptionsPress, onAudioPress }: Au
           onAudioPress()
         }}>
           <View className="flex-row items-center flex-1">
-            <View className="h-11 w-11 basis-11 justify-center items-center rounded-full bg-zinc-300">
-              <Text className="text-xl font-bold text-center">
+            <View className="h-11 w-11 basis-11 justify-center items-center rounded-full">
+              <Text className="text-xl font-bold text-center" style={{ color: Colors.white }}>
                 {getThanbText(data.filename)}
               </Text>
             </View>
             <View className="w-[-180px] pl-1 ">
-              <Text numberOfLines={1} className="text-sm ">
+              <Text numberOfLines={1} className="text-sm " style={{ color: Colors.white }}>
                 {data.filename.slice(0, 29)}
               </Text>
-              <Text numberOfLines={1} className="text-xs from-neutral-400 ml-1">
+              <Text numberOfLines={1} className="text-xs ml-1" style={{ color: Colors.white }}>
                 {comverttime(data.duration)}
               </Text>
             </View>
@@ -49,7 +50,7 @@ export default function AudioListItem({ data, onOptionsPress, onAudioPress }: Au
           <Entypo
             name="dots-three-vertical"
             size={20}
-            color="#000"
+            color="#fff"
             onPress={onOptionsPress()}
           />
         </View>

@@ -14,12 +14,13 @@ export default function PlayerButton(props: PropsInterface){
 
     const { iconColor = '#000', iconType, onPress, size = 50 } = props;
     
+    //@ts-ignore
     const getIconName = (name) => {
         switch(name) {
             case 'PLAY':
                 return 'pausecircle';
             case 'PAUSE':
-                return 'playcircle';
+                return 'playcircleo';
             case 'NEXT':
                 return 'forward';
             case 'PREV':

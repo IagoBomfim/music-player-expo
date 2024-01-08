@@ -9,6 +9,7 @@ import OptionsModal from '../components/optionsModal';
 import { play, pause, resume, playNext } from '../../src/functions/AudioController';
 import { GetMetaDados } from '../../src/functions/functions';
 import FloatingButton from '../components/FloatingButton';
+import Colors from '../../src/constants/defaultTheme';
 
 interface AudioProps {
   id: string;
@@ -17,7 +18,7 @@ interface AudioProps {
   duration: number;
 }
 
-export default function TabOneScreen() {
+export default function SoundScreen() {
   const { audioFiles, IsPlaying, UpdatePropsPlaying, CurrentAudio } = useContext(AudioContext);
 
   const [visible, setVisible] = useState(false);
@@ -77,7 +78,7 @@ export default function TabOneScreen() {
 }
 
   return (
-    <View className='flex-1 pt-[48px] pl-2 bg-slate-400'>
+    <View className='flex-1  pl-2' style={{ backgroundColor: Colors.background }}>
       <FlashList
         data={audioFiles}
         renderItem={({ item }) => {
