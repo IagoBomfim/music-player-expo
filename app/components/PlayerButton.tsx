@@ -1,18 +1,18 @@
-import {} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import { AntDesign } from '@expo/vector-icons';
 
 interface PropsInterface {
-    iconType: 'PLAY' | 'PAUSE' | 'NEXT' | 'PREV';
+    iconType: 'PLAY' | 'PAUSE' | 'NEXT' | 'PREV' | 'REFRESE';
     iconColor?: string;
-    size?: number;
+    size: number;
     onPress?: () => void;
 }
 
 
 export default function PlayerButton(props: PropsInterface){
 
-    const { iconColor = '#000', iconType, onPress, size = 50 } = props;
+    const { iconColor = '#000', iconType, onPress, size } = props;
     
     //@ts-ignore
     const getIconName = (name) => {
@@ -25,16 +25,22 @@ export default function PlayerButton(props: PropsInterface){
                 return 'forward';
             case 'PREV':
                 return 'banckward';
+            case 'REFRESH':
+                return 'retweet';
         }
     }
 
     return (
-        <AntDesign 
+        <TouchableOpacity>
+            <AntDesign 
             {...props} 
             onPress={onPress}
             name={getIconName(iconType)}
             size={size}
             color={iconColor}
         />
+        </TouchableOpacity>
     )
 }
+
+//getIconName(iconType)

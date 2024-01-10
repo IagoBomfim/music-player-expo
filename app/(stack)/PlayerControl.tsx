@@ -22,38 +22,49 @@ export default function PlayerControl() {
     return (
         <>
         <StatusBar style="light" />
-    <View className='flex-1 pt-[48px] pl-2 justify-center' style={{ backgroundColor: Colors.background }}>
-        <View className=" flex-row justify-between items-center ">
+    <View className='flex-1 pt-[48px] items-center' style={{ backgroundColor: Colors.background }}>
+        <View className=" flex-row justify-between p-2 items-center w-full">
             <TouchableOpacity onPress={useNavigation().goBack}>
-                <Ionicons name="ios-arrow-back" size={23} color={Colors.white} />
+                <Ionicons name="ios-arrow-back" size={30} color={Colors.white} />
             </TouchableOpacity>
             <TouchableOpacity>
-            <Ionicons name="ios-menu" size={23} color={Colors.white} />
+            <Ionicons name="ios-menu" size={30} color={Colors.white} />
             </TouchableOpacity>
         </View>
 
-        <View className="flex-1 justify-center items-center w-full">
-            <MaterialCommunityIcons name="music-circle" size={300} color='#000' />
+        <View className=" justify-center items-center w-full mx-[81px] my-[60]">
+            <MaterialCommunityIcons name="music-circle" size={260} color='#fff' />
         </View>
 
-        <View className="pb-[50px]">
-            <Text className="text-xl p-3 font-semibold " numberOfLines={1} style={{ color: Colors.grey5 }}>Thunder</Text>
-            <Text className="text-sm p-3 font-medium " numberOfLines={1} style={{ color: Colors.grey3 }} >file name</Text>
-            <Slider 
-                className={`w-[${width}] h-9 `}
+        <View className="w-full justify-center items-center text-center">
+            <Text className="text-xl font-semibold" numberOfLines={1} style={{ color: Colors.grey5 }}>Thunder</Text>
+            <Text className="text-sm font-medium " numberOfLines={1} style={{ color: Colors.grey3 }} >file name</Text>
+        </View>
+
+        <View className="my-0 mx-[24px] w-full mt-6">
+            <Slider
                 minimumValue={0}
                 maximumValue={1}
-                minimumTrackTintColor="#ffffff"
-                maximumTrackTintColor="#000000"
-            />
-            <View className={`w-full flex-row content-center items-center justify-center`}>
-                <PlayerButton iconType="PREV" iconColor={Colors.white} />
-                <PlayerButton  iconType={IsPlaying? 'PLAY' : 'PAUSE' } iconColor={Colors.white} />
-                <PlayerButton iconType="NEXT" iconColor={Colors.white} />
+                value={0.3}
+                minimumTrackTintColor={Colors.primary}
+                maximumTrackTintColor={Colors.grey3}
+            ></Slider>
+            <View className="flex-row w-full justify-between px-4 mb-5">
+                <Text className={`text-sm text-green-100 `}>0:17</Text>
+                <Text className={`text-sm text-green-100 `}>2:37</Text>
             </View>
         </View>
+
+        <View className={`w-full flex-row items-center justify-center my-[0px] mx-[24px] px-4`}>
+                <View className={`w-64 h-[55px] rounded-[54px] flex-row items-center justify-between px-5`} style={{ backgroundColor: Colors.secondary }}>
+                    <PlayerButton iconType="PREV" iconColor={Colors.white} size={28} />
+                    <View className={`w-[88px] h-[88px] rounded-[88px]`} style={{ backgroundColor: Colors.background}} ></View>
+                    <PlayerButton iconType="NEXT" iconColor={Colors.white} size={28} />
+                </View>
+            </View>
     </View>
     </>
     )
 }
 
+// <PlayerButton iconType={IsPlaying? 'PAUSE' : 'PLAY'} iconColor={Colors.white} size={30} />
