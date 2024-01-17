@@ -5,7 +5,8 @@ import {
 } from '@react-navigation/material-top-tabs';
 import { ParamListBase, TabNavigationState } from '@react-navigation/native';
 import { withLayoutContext } from 'expo-router';
-import Colors from '../../src/constants/defaultTheme';
+
+import Colors from '@/constants/defaultTheme';
 
 const { Navigator } = createMaterialTopTabNavigator();
 
@@ -33,7 +34,7 @@ const Layout = () => {
         backgroundColor: Colors.background
       }
      }} >
-      <MaterialTopTabs.Screen name='index' options={{ title: 'Music' }} />
+      <MaterialTopTabs.Screen name='index' options={{ title: 'Songs' }} />
     </MaterialTopTabs>
   )
 }

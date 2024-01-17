@@ -1,15 +1,16 @@
 import { useContext } from "react";
-import { View, Text, Dimensions, TouchableOpacity } from "react-native";
+import { View, Text, Dimensions, TouchableOpacity, Image } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { useNavigation, useSearchParams } from "expo-router";
 
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 
-import { AudioContext } from "../../src/context/AudioProvaider";
 import PlayerButton from "../components/PlayerButton";
-import Colors from "../../src/constants/defaultTheme";
-import { StatusBar } from "expo-status-bar";
-import { pause } from "../../src/functions/AudioController";
+
+import { AudioContext } from "@/context/AudioProvaider";
+import Colors from "@/constants/defaultTheme";
+import { pause, playNext } from "@/functions/AudioController";
 
 export default function PlayerControl() {
     const { CurrentAudio, IsPlaying } = useContext(AudioContext);
@@ -33,7 +34,7 @@ export default function PlayerControl() {
         </View>
 
         <View className=" justify-center items-center w-full mx-[81px] my-[60]">
-            <MaterialCommunityIcons name="music-circle" size={260} color='#fff' />
+            <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZUueA-6l-wEZ5a5m3RMZxvNRCy8eSQDO0Pg&usqp=CAU' }} className="w-[81px] h-[60px]"/>
         </View>
 
         <View className="w-full justify-center items-center text-center">
@@ -68,3 +69,5 @@ export default function PlayerControl() {
 }
 
 // <PlayerButton iconType={IsPlaying? 'PAUSE' : 'PLAY'} iconColor={Colors.white} size={30} />
+
+//https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZUueA-6l-wEZ5a5m3RMZxvNRCy8eSQDO0Pg&usqp=CAU

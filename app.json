@@ -31,6 +31,9 @@
     "plugins": [
       "expo-router",
       "expo-localization"
-    ]
+    ],
+    "experiments": {
+      "tsconfigPaths": true
+    }
   }
 }

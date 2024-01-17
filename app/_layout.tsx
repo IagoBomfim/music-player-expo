@@ -5,9 +5,9 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack, usePathname } from "expo-router";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
+import { View, Text, useColorScheme } from "react-native";
 import { AudioProvaider } from "../src/context/AudioProvaider";
 import { StatusBar } from 'expo-status-bar';
 import Colors from "../src/constants/defaultTheme";
@@ -49,16 +49,45 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
+  const routeSelected = usePathname();
+  const routes = ['']
+
+  const render = () => {
+    if ( 1+1 === 2  ) {
+      return <Ionicons name="ios-search" size={24} color={Colors.white} />
+    } else {
+      return <Ionicons name="ios-settings-outline" size={24} color={Colors.white} />
+    }
+  }
+
+  const routeSelectedName = (routeName: string) => {
+    switch (routeName) {
+      case '/':
+        return 'Songs';
+      case '/Album':
+        return 'Album';
+      case '/Artist':
+        return 'Artist';
+      case '/PlayList':
+        return 'Playlist';
+    }
+  }
+  
   return (
     <>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ 
-            headerTitle: '  ',
+            headerTitle: ' ',
             headerStyle: {
               backgroundColor: Colors.background
             },
-            headerRight: () => <Ionicons name="ios-settings-outline" size={24} color={Colors.white} />
+            headerLeft: () => <Text className="text-slate-200 ">{routeSelectedName(routeSelected)}</Text>,
+            headerRight: () => (
+              <View className="p-1">
+                {render()}
+              </View>
+            )
             }} />
           <Stack.Screen name="(stack)" options={{ headerShown: false }} />
         </Stack>

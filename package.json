@@ -20,6 +20,7 @@
     "expo": "^49.0.21",
     "expo-av": "~13.4.1",
     "expo-font": "~11.4.0",
+    "expo-linear-gradient": "~12.3.0",
     "expo-linking": "~5.0.2",
     "expo-localization": "~14.3.0",
     "expo-media-library": "~15.4.1",
@@ -38,7 +39,8 @@
     "react-native-screens": "~3.22.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-track-player": "^3.2.0",
-    "react-native-web": "~0.19.6"
+    "react-native-web": "~0.19.6",
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

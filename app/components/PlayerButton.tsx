@@ -6,7 +6,7 @@ interface PropsInterface {
     iconType: 'PLAY' | 'PAUSE' | 'NEXT' | 'PREV' | 'REFRESE';
     iconColor?: string;
     size: number;
-    onPress?: () => void;
+    onPress?: () => Function;
 }
 
 
@@ -31,7 +31,7 @@ export default function PlayerButton(props: PropsInterface){
     }
 
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => onPress}>
             <AntDesign 
             {...props} 
             onPress={onPress}
