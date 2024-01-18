@@ -3,21 +3,21 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import Colors from '@/constants/defaultTheme'
+import Colors from '@/constants/defaultTheme';
 
-const start = { x: 0, y: 0 }
-const end = { x: 1, y: 0 }
+const start = { x: 0, y: 0 };
+const end = { x: 1, y: 0 };
 
 type PlayButtonProps = {
     size: number;
-    circle: any;
+    circle: number;
     icon: string;
     onPress: Function;
-}
+};
 
-const PlayButton = ({size, circle, icon, onPress}: PlayButtonProps) => {
+export default const PlayerButtonElipse = ({size, circle, icon, onPress}: PlayButtonProps) => {
   return (
-    <TouchableOpacity className='items-center justify-items-center '>
+    <Container>
 
       <Image source={{ uri: icon }} style={{position: 'relative', zIndex: 1}}/>
 
@@ -54,7 +54,7 @@ const PlayButton = ({size, circle, icon, onPress}: PlayButtonProps) => {
         }}
       />
 
-    </TouchableOpacity>
+    </Container>
   );
 }
 
@@ -71,5 +71,3 @@ const Circle = styled(LinearGradient)`
   height: ${props => props.circle || 70}px;
   border-radius: ${props => props.circle / 2 || 70/2}px;
 `;
-
-export default PlayButton;
