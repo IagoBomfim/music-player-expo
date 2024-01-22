@@ -7,7 +7,9 @@ export default function StackLayout() {
         <Stack.Screen 
             name='PlayerControl' 
             options={{
-                headerShown: false
+                headerShown: false,
+                gestureEnabled: true,
+                gestureDirection: 'vertical',
             }} 
         />
     </Stack>

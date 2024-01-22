@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { View, Text, Dimensions, TouchableOpacity, Image } from "react-native";
+import { View, Text, Dimensions, TouchableOpacity, Image, Touchable } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation, useSearchParams } from "expo-router";
 
@@ -7,6 +7,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 
 import PlayerButton from "../components/PlayerButton";
+import { PlayerButtonElipse } from '../components/PlayerButtonElipse';
 
 import { AudioContext } from "@/context/AudioProvaider";
 import Colors from "@/constants/defaultTheme";
@@ -14,11 +15,8 @@ import { pause, playNext } from "@/functions/AudioController";
 
 export default function PlayerControl() {
     const { CurrentAudio, IsPlaying } = useContext(AudioContext);
-    console.log(IsPlaying);
     
     const { width } = Dimensions.get('window');
-
-    pause()
     
     return (
         <>
@@ -33,8 +31,13 @@ export default function PlayerControl() {
             </TouchableOpacity>
         </View>
 
-        <View className=" justify-center items-center w-full mx-[81px] my-[60]">
-            <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZUueA-6l-wEZ5a5m3RMZxvNRCy8eSQDO0Pg&usqp=CAU' }} className="w-[81px] h-[60px]"/>
+        <View className=" justify-center items-center w-full">
+            <Image source={require('assets/Images-default/vinyl.jpg')} style={{ 
+                marginHorizontal: 81, 
+                marginVertical: 60,
+                width: 300,
+                height: 300
+                 }} />
         </View>
 
         <View className="w-full justify-center items-center text-center">
@@ -59,9 +62,22 @@ export default function PlayerControl() {
         <View className={`w-full flex-row items-center justify-center my-[0px] mx-[24px] px-4`}>
                 <View className={`w-64 h-[55px] rounded-[54px] flex-row items-center justify-between px-5`} style={{ backgroundColor: Colors.secondary }}>
                     <PlayerButton iconType="PREV" iconColor={Colors.white} size={28} />
-                    <View className={`w-[88px] h-[88px] rounded-[88px]`} style={{ backgroundColor: Colors.background}} ></View>
+
+                    <View className={`w-[88px] h-[88px] rounded-[88px] items-center justify-center`} style={{ backgroundColor: Colors.background}} >
+                        <PlayerButtonElipse circle={62.82} size={70}>
+                            <PlayerButton iconType={IsPlaying? 'PAUSE' : 'PLAY'} iconColor={Colors.white} size={30} />
+                        </PlayerButtonElipse>
+                    </View>
+
                     <PlayerButton iconType="NEXT" iconColor={Colors.white} size={28} />
                 </View>
+            </View>
+
+            <View className="my-9 mx-0 items-center justify-center">
+                <TouchableOpacity className="items-center justify-center ">
+                    <Ionicons name="arrow-up" color={Colors.accent} size={20} />
+                <Text className="text-sm font-bold " style={{ color: Colors.accent }}>Lirics</Text>
+                </TouchableOpacity>
             </View>
     </View>
     </>
