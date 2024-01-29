@@ -2,14 +2,15 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions, View, Text } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { AVPlaybackStatus, Audio } from 'expo-av';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
  
-import { AudioContext } from '../../src/context/AudioProvaider';
-import AudioListItem from '../components/AudioListItem';
-import OptionsModal from '../components/optionsModal';
-import { play, pause, resume, playNext } from '../../src/functions/AudioController';
-import { GetMetaDados } from '../../src/functions/functions';
-import FloatingButton from '../components/FloatingButton';
-import Colors from '../../src/constants/defaultTheme';
+import { AudioContext } from '@/context/AudioProvaider';
+import AudioListItem from '@/components/AudioListItem';
+import OptionsModal from '@/components/optionsModal';
+import { play, pause, resume, playNext } from '@/functions/AudioController';
+import { GetMetaDados } from '@/functions/functions';
+import FloatingButton from '@/components/FloatingButton';
+import Colors from '@/constants/defaultTheme';
 
 interface AudioProps {
   id: string;
@@ -29,7 +30,6 @@ export default function SoundScreen() {
   IsPlaying ? StatusPlaying = 'playing' : StatusPlaying = 'off';
 
   const handleAudioPress = async (item: AudioProps) => {
-    console.log(item.filename);
     
     const PlayBackObj = new Audio.Sound();
     try {

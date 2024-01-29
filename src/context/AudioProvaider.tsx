@@ -2,6 +2,7 @@ import { createContext, useEffect, useState, ReactNode } from 'react';
 import { Alert } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import { AVPlaybackStatus } from 'expo-av';
+import { useSaveCurrentAudio, useStatusPlayng } from '@/hook';
 
 interface Audio {
     id: string;
@@ -28,8 +29,6 @@ export function AudioProvaider({ children }: {children: ReactNode }) {
 
     let IsPlaying: boolean = false;
     let CurrentAudio: Audio = {} as Audio;
-
-
 
     useEffect(() => {
         getPermission();
@@ -69,6 +68,7 @@ export function AudioProvaider({ children }: {children: ReactNode }) {
         if (!permission.granted && permission.canAskAgain) {
             const { status, canAskAgain } = await MediaLibrary.requestPermissionsAsync();
 
+            //@ts-ignore
             if (status === 'danied' && canAskAgain) {
                 permissionAlert();
             }
@@ -78,6 +78,7 @@ export function AudioProvaider({ children }: {children: ReactNode }) {
                 getAudioFiles();
             }
 
+            //@ts-ignore
             if (status === 'danied' && !canAskAgain) {
                 permissionAlert();
             }
@@ -85,9 +86,13 @@ export function AudioProvaider({ children }: {children: ReactNode }) {
     };
 
     const UpdatePropsPlaying = (UpdateIsPlaying: boolean, UpateCurrentAudioData: Audio) => {
-     
+        const { getIsPlayngStatus } = useStatusPlayng();
+        //@ts-ignore
+        useSaveCurrentAudio();
+
         return (
             IsPlaying = UpdateIsPlaying,
+            getIsPlayngStatus(UpdateIsPlaying),
             CurrentAudio = UpateCurrentAudioData
         )
         

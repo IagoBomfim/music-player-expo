@@ -6,12 +6,13 @@ import { useNavigation, useSearchParams } from "expo-router";
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 
-import PlayerButton from "../components/PlayerButton";
-import { PlayerButtonElipse } from '../components/PlayerButtonElipse';
+import PlayerButton from "@/components/PlayerButton";
+import { PlayerButtonElipse } from '@/components/PlayerButtonElipse';
 
 import { AudioContext } from "@/context/AudioProvaider";
 import Colors from "@/constants/defaultTheme";
 import { pause, playNext } from "@/functions/AudioController";
+import { comverttime } from "@/functions/functions";
 
 export default function PlayerControl() {
     const { CurrentAudio, IsPlaying } = useContext(AudioContext);
@@ -48,14 +49,14 @@ export default function PlayerControl() {
         <View className="my-0 mx-[24px] w-full mt-6">
             <Slider
                 minimumValue={0}
-                maximumValue={1}
+                maximumValue={CurrentAudio.duration}
                 value={0.3}
                 minimumTrackTintColor={Colors.primary}
                 maximumTrackTintColor={Colors.grey3}
             ></Slider>
             <View className="flex-row w-full justify-between px-4 mb-5">
                 <Text className={`text-sm text-green-100 `}>0:17</Text>
-                <Text className={`text-sm text-green-100 `}>2:37</Text>
+                <Text className={`text-sm text-green-100 `}>{comverttime(CurrentAudio.duration)}</Text>
             </View>
         </View>
 

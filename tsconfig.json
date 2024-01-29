@@ -5,7 +5,8 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@Components": ["src/components/*"],
     }
   }
 }

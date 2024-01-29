@@ -53,6 +53,7 @@ export default function AudioListItem({ data, onOptionsPress, onAudioPress }: Au
           />
         </View>
       </View>
+      
       <View className="bg-[#333] w-1 opacity-30 h-[0.5px] self-center mt-2"></View>
     </>
   );
