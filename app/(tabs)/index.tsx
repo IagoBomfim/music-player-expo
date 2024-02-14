@@ -1,93 +1,96 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { Dimensions, View, Text } from 'react-native';
+import { useContext, useState } from 'react';
+import { View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { AVPlaybackStatus, Audio } from 'expo-av';
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
  
 import { AudioContext } from '@/context/AudioProvaider';
 import AudioListItem from '@/components/AudioListItem';
-import OptionsModal from '@/components/optionsModal';
 import { play, pause, resume, playNext } from '@/functions/AudioController';
 import { GetMetaDados } from '@/functions/functions';
-import FloatingButton from '@/components/FloatingButton';
 import Colors from '@/constants/defaultTheme';
+
+import { useMusicStorage } from '@/stores/MusicStorage';
+import { useContextMusicStore } from '@/stores/MusicContextStore';
 
 interface AudioProps {
   id: string;
   uri: string;
   filename: string;
   duration: number;
+  modificationTime: number;
 }
 
 export default function SoundScreen() {
-  const { audioFiles, IsPlaying, UpdatePropsPlaying, CurrentAudio } = useContext(AudioContext);
+  const { audioFiles } = useContext(AudioContext);
+
+  const { add: CurrentMusicStorageAdd, CurrentMusic } = useMusicStorage();
+  const ContextMusicStore = useContextMusicStore();
 
   const [visible, setVisible] = useState(false);
 
-  let  SoundObj: AVPlaybackStatus | undefined = undefined;
-  let StatusPlaying: 'off' | 'playing' | 'pause' = 'off';
-
-  IsPlaying ? StatusPlaying = 'playing' : StatusPlaying = 'off';
-
   const handleAudioPress = async (item: AudioProps) => {
+    console.log(ContextMusicStore.SoundObj);
     
-    const PlayBackObj = new Audio.Sound();
     try {
-      //play
-      if (IsPlaying === false && StatusPlaying === 'off') {
-        const Status = await play(item)
-        SoundObj = Status;
-        StatusPlaying = 'playing';
-        GetMetaDados(item.uri, item.id);
-  
-        return UpdatePropsPlaying(true, item);
+      //Play Music for the fist time.
+      if(ContextMusicStore.SoundObj === null) {
+        const PlayBackObj = new Audio.Sound();
+        const status = await play(PlayBackObj, item);
+        
+          return (
+            ContextMusicStore.UpdatePlayBackObj(PlayBackObj),
+            ContextMusicStore.UpdateIsPlaying(true),
+            CurrentMusicStorageAdd(item),
+            ContextMusicStore.UpdateSoundObj(status)
+          )
       }
 
-      //next play
-      if (SoundObj?.isLoaded && CurrentAudio.id !== item.id && StatusPlaying === 'playing'){
-        const status = await playNext(item);
+      //resume audio
+      if (ContextMusicStore.SoundObj.isLoaded && CurrentMusic.id !== item.id) {
+        const status = await playNext(ContextMusicStore.PlayBackObj, item);
 
-        SoundObj = status;
-        StatusPlaying = 'playing';
-
-        return UpdatePropsPlaying(true, item);
-      }
-      
-      //pause
-      if (SoundObj?.isLoaded && IsPlaying && CurrentAudio.id === item.id && StatusPlaying === 'playing') {
-        const status = await pause();
-        SoundObj = status;
-        StatusPlaying = 'pause';
-
-        return UpdatePropsPlaying(false, item);
+        return (
+          CurrentMusicStorageAdd(item),
+          ContextMusicStore.UpdateIsPlaying(true),
+          ContextMusicStore.UpdateSoundObj(status)
+        ) 
       }
 
-      //resume
-      if (SoundObj?.isLoaded && !IsPlaying && CurrentAudio.id === item.id && StatusPlaying === 'pause') {
-        const status = await resume()
-        SoundObj = status;
-        StatusPlaying = 'playing';
+      //pause music
+      if (ContextMusicStore.SoundObj.isLoaded && ContextMusicStore.SoundObj.isPlaying) {
+        const status = await pause(ContextMusicStore.PlayBackObj);
 
-        return UpdatePropsPlaying(true, item);
+        //@ts-ignore
+        return (ContextMusicStore.UpdateIsPlaying(false), 
+        ContextMusicStore.UpdateSoundObj(status))
       }
+
+      //resume audio
+      if (ContextMusicStore.SoundObj.isLoaded && !ContextMusicStore.SoundObj.isPlaying && CurrentMusic.id === item.id){
+        const status = await resume(ContextMusicStore.PlayBackObj)
+
+        //@ts-ignore
+        return ( ContextMusicStore.UpdateIsPlaying(true), 
+        ContextMusicStore.UpdateSoundObj(status))
+      }
+
 
     } catch (error) {
-      
+      console.log(error);
     }
-    
 }
 
   return (
     <View className='flex-1  pl-2' style={{ backgroundColor: Colors.background }}>
       <FlashList
-        data={audioFiles}
         renderItem={({ item }) => {
           return <AudioListItem 
           data={item} 
           onOptionsPress={() => {setVisible(true)}} onAudioPress={() => handleAudioPress(item)}
            />
         }}
-        estimatedItemSize={800}
+        estimatedItemSize={72}
+        data={audioFiles}
       />
       {/* <FloatingButton /> */}
     </View>

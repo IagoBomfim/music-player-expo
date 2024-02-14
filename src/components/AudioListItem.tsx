@@ -1,6 +1,5 @@
 import { View, Text, TouchableWithoutFeedback, TouchableOpacity, Image } from "react-native";
 import { Entypo } from "@expo/vector-icons";
-import { comverttime } from "../../src/functions/functions";
 import { Link } from "expo-router";
 import Colors from "../../src/constants/defaultTheme";
 
@@ -17,13 +16,35 @@ interface AudioProps {
   onAudioPress: () => void;
 }
 
-const getThanbText = (filenameText: string) => filenameText[0];
+
+const comverttime = (minutes: number) => {
+  if (minutes) {
+      const hrs = minutes/60;
+      const minute = hrs.toString().split('.')[0];
+      const percent = parseInt(hrs.toString().split('.')[1].slice(0,2));
+      const sec = Math.ceil((60 * percent) / 100);
+
+      if (parseInt(minute) < 10 && sec < 10) {
+          return `0${minute}:0${sec}`            
+      }
+
+      if (parseInt(minute) < 10) {
+          return `0${minute}:${sec}`
+      }
+
+      if (sec < 10) {
+          return `${minute}:0${sec}`   
+      }
+
+      return `${minute}:${sec}`
+  }
+}
 
 export default function AudioListItem({ data, onOptionsPress, onAudioPress }: AudioProps) {
   return (
     <>
       <View className="w-full flex-row justify-between p-2 self-center ">
-        <Link href='/PlayerControl' asChild >
+        <Link href='/' asChild >
         <TouchableOpacity 
         onPress={() => {
           onAudioPress()
@@ -37,7 +58,7 @@ export default function AudioListItem({ data, onOptionsPress, onAudioPress }: Au
                 {data.filename.slice(0, 29)}
               </Text>
               <Text numberOfLines={1} className="text-xs ml-1" style={{ color: Colors.white }}>
-                {comverttime(data.duration)}
+                {/* {comverttime(data.duration)} */}
               </Text>
             </View>
           </View>

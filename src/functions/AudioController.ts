@@ -7,15 +7,8 @@ interface Audio {
   duration: number;
 }
 
-interface PlayProps {
-    playBackObj: any;
-    item: Audio;
-}
-
-const playBackObj = new Audio.Sound();
-
 //play audio
-export const play = async (item: Audio) => {
+export const play = async (playBackObj: Audio.Sound, item: Audio) => {
   try {
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
@@ -37,7 +30,7 @@ export const play = async (item: Audio) => {
 };
 
 //pause audio
-export const pause = async () => {
+export const pause = async (playBackObj: Audio.Sound) => {
   console.log('funcao pause');
   try {
     const status = await playBackObj.pauseAsync()
@@ -49,7 +42,7 @@ export const pause = async () => {
 };
 
 //resume audio
-export const resume = async () => {
+export const resume = async (playBackObj: Audio.Sound) => {
 
   console.log('funcao resume');
   
@@ -63,12 +56,12 @@ export const resume = async () => {
 };
 
 //select another audio
-export const playNext = async (item: Audio) => {
+export const playNext = async (playBackObj: Audio.Sound, item: Audio) => {
     try {
       await playBackObj.stopAsync();
       await playBackObj.unloadAsync();
       
-      const status = await play(item);
+      const status = await play(playBackObj, item);
 
       return status;
     } catch (error) {

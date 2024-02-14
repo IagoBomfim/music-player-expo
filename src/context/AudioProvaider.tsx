@@ -2,13 +2,14 @@ import { createContext, useEffect, useState, ReactNode } from 'react';
 import { Alert } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import { AVPlaybackStatus } from 'expo-av';
-import { useSaveCurrentAudio, useStatusPlayng } from '@/hook';
 
 interface Audio {
     id: string;
     uri: string;
     filename: string;
     duration: number;
+    modificationTime: number;
+
 }
 
 interface PlayList {}
@@ -51,7 +52,8 @@ export function AudioProvaider({ children }: {children: ReactNode }) {
 
         media = await MediaLibrary.getAssetsAsync({
             mediaType: 'audio',
-            first: media.totalCount
+            first: media.totalCount,
+            sortBy: 'modificationTime',
         });
 
         setAudioFiles([...audioFiles, ...media.assets]);
@@ -86,13 +88,10 @@ export function AudioProvaider({ children }: {children: ReactNode }) {
     };
 
     const UpdatePropsPlaying = (UpdateIsPlaying: boolean, UpateCurrentAudioData: Audio) => {
-        const { getIsPlayngStatus } = useStatusPlayng();
         //@ts-ignore
-        useSaveCurrentAudio();
 
         return (
             IsPlaying = UpdateIsPlaying,
-            getIsPlayngStatus(UpdateIsPlaying),
             CurrentAudio = UpateCurrentAudioData
         )
         
