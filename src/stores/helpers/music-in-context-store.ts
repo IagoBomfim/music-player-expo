@@ -1,8 +1,11 @@
 import { AVPlaybackStatus, Audio } from "expo-av";
 
 export function add(IsPlaying: boolean, NewIsPlaying: boolean) {
-
-   return NewIsPlaying;
+   if (IsPlaying === NewIsPlaying) {
+      return IsPlaying;
+   } else {
+      return NewIsPlaying;
+   }
 }
 
 export function UpdatePlayBackObjFunction(PlayBackObj:Audio.Sound, newPlayBackObj:Audio.Sound) {
@@ -10,5 +13,13 @@ export function UpdatePlayBackObjFunction(PlayBackObj:Audio.Sound, newPlayBackOb
 }
 
 export function UpdateSoundObjFunction(SoundObj: AVPlaybackStatus | null, newSoundObj: AVPlaybackStatus | null) {
-   return newSoundObj;
+   if (SoundObj === null) {
+      return newSoundObj;
+
+   } else if (SoundObj === newSoundObj) {
+      return SoundObj;
+      
+   } else {
+      return newSoundObj;
+   }
 }

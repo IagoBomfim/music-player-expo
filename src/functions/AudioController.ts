@@ -1,4 +1,4 @@
-import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from "expo-av";
+import { AVPlaybackStatus, Audio, InterruptionModeAndroid, InterruptionModeIOS } from "expo-av";
 
 interface Audio {
   id: string;
@@ -8,7 +8,7 @@ interface Audio {
 }
 
 //play audio
-export const play = async (playBackObj: Audio.Sound, item: Audio) => {
+export const MusicPlay = async (playBackObj: Audio.Sound, item: Audio) => {
   try {
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
@@ -20,8 +20,8 @@ export const play = async (playBackObj: Audio.Sound, item: Audio) => {
       playsInSilentModeIOS: true
     })
 
-    const Status = await playBackObj.loadAsync({ uri: item.uri });
-    await playBackObj.playAsync();
+    const Status: AVPlaybackStatus = await playBackObj.loadAsync({ uri: item.uri }, { shouldPlay: true });
+    
 
     return Status;
   } catch (error) {
@@ -61,7 +61,7 @@ export const playNext = async (playBackObj: Audio.Sound, item: Audio) => {
       await playBackObj.stopAsync();
       await playBackObj.unloadAsync();
       
-      const status = await play(playBackObj, item);
+      const status = await MusicPlay(playBackObj, item);
 
       return status;
     } catch (error) {

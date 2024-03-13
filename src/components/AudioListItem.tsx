@@ -2,6 +2,7 @@ import { View, Text, TouchableWithoutFeedback, TouchableOpacity, Image } from "r
 import { Entypo } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import Colors from "../../src/constants/defaultTheme";
+import { useContextMusicStore } from "@/stores/MusicContextStore";
 
 interface Audio {
   id: string;
@@ -44,7 +45,7 @@ export default function AudioListItem({ data, onOptionsPress, onAudioPress }: Au
   return (
     <>
       <View className="w-full flex-row justify-between p-2 self-center ">
-        <Link href='/' asChild >
+        <Link href='/PlayerControl' asChild >
         <TouchableOpacity 
         onPress={() => {
           onAudioPress()

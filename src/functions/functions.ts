@@ -1,27 +1,89 @@
+import { AVPlaybackStatus, Audio } from 'expo-av';
 
-const comverttime = (minutes: number) => {
-    if (minutes) {
-        const hrs = minutes/60;
-        const minute = hrs.toString().split('.')[0];
-        const percent = parseInt(hrs.toString().split('.')[1].slice(0,2));
-        const sec = Math.ceil((60 * percent) / 100);
+import { MusicPlay, pause, resume, playNext } from '@/functions/AudioController';
 
-        if (parseInt(minute) < 10 && sec < 10) {
-            return `0${minute}:0${sec}`            
+type AudioProps = {
+    id: string;
+    uri: string;
+    filename: string;
+    duration: number;
+}
+
+type ContextMusicStoreProps = {
+    IsPlaying: boolean;
+    PlayBackObj: Audio.Sound;
+    SoundObj: AVPlaybackStatus | null;
+    UpdateIsPlaying: (IsPlaying: boolean) => void;
+    UpdatePlayBackObj: (PlayBackObj: Audio.Sound ) => void;
+    UpdateSoundObj: (SoundObj:AVPlaybackStatus ) => void;
+}
+
+type MusicStorageProps = {
+    CurrentMusic: AudioProps;
+    add: (CurrentAudio: AudioProps) => void;
+    UpdateCurrentMusic: () => void;
+}
+
+interface handleAudioPressProps {
+    item: AudioProps;
+    MusicStorage: MusicStorageProps;
+    ContextMusicStore: ContextMusicStoreProps;
+}
+
+ const handleAudioPress = async ({ item: MusicItem, MusicStorage, ContextMusicStore }: handleAudioPressProps) => {  
+    try {
+        //Play Music for the fist time.
+        if (ContextMusicStore.SoundObj === null) {
+            console.log('funcao play');
+
+            const PlayBackObj = new Audio.Sound();
+            const Status = await MusicPlay(PlayBackObj, MusicItem)
+
+            return (
+                ContextMusicStore.UpdatePlayBackObj(PlayBackObj),
+                ContextMusicStore.UpdateIsPlaying(true),
+                MusicStorage.add(MusicItem),
+                //@ts-ignore
+                ContextMusicStore.UpdateSoundObj(Status)
+            )
         }
 
-        if (parseInt(minute) < 10) {
-            return `0${minute}:${sec}`
+        //next play audio
+        if (ContextMusicStore.SoundObj.isLoaded && MusicStorage.CurrentMusic.id !== MusicItem.id) {
+            const status = await playNext(ContextMusicStore.PlayBackObj, MusicItem);
+
+            return (
+                MusicStorage.add(MusicItem),
+                ContextMusicStore.UpdateIsPlaying(true),
+                //@ts-ignore
+                ContextMusicStore.UpdateSoundObj(status)
+            )
         }
 
-        if (sec < 10) {
-            return `${minute}:0${sec}`   
+        //pause music
+        if (ContextMusicStore.SoundObj.isLoaded && ContextMusicStore.SoundObj.isPlaying) {
+            const status = await pause(ContextMusicStore.PlayBackObj);
+
+            //@ts-ignore
+            return (ContextMusicStore.UpdateIsPlaying(false),
+                //@ts-ignore
+                ContextMusicStore.UpdateSoundObj(status))
         }
 
-        return `${minute}:${sec}`
+        //resume audio
+        if (ContextMusicStore.SoundObj.isLoaded && !ContextMusicStore.SoundObj.isPlaying && MusicStorage.CurrentMusic.id === MusicItem.id) {
+            const status = await resume(ContextMusicStore.PlayBackObj)
+
+            //@ts-ignore
+            return (ContextMusicStore.UpdateIsPlaying(true),
+                //@ts-ignore
+                ContextMusicStore.UpdateSoundObj(status))
+        }
+
+
+    } catch (error) {
+        console.log(error);
     }
 }
 
-const GetMetaDados = async (uri: string, id: string) => {}
-
-export { comverttime, GetMetaDados }
+export { handleAudioPress }
